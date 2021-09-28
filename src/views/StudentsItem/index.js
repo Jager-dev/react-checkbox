@@ -1,27 +1,44 @@
-import React, {useState} from 'react';
-import {Container} from "@material-ui/core";
-import {Table} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
+import './index.css'
 
-const StudentsItem = () => {
-  const [isSelected, setIsSelected] = useState([])
+const StudentsItem = ({student, idx, isCheckedAll, type, students,checkedStudent,setCheckedStudent, setIsCheckedAll, setType}) => {
+  const [isChecked, setIsChecked] = useState(false)
+
+  useEffect(() => {
+    if (students.length !== checkedStudent.length){
+      setType("all")
+      setIsChecked(isCheckedAll)
+    }else{
+      setType("one")
+      setIsCheckedAll(false)
+    }
+  },[students.length, checkedStudent.length, setIsCheckedAll, setType])
+
+  useEffect(() => {
+    if (type === "all"){
+      setIsChecked(isCheckedAll)
+    }
+  },[isCheckedAll, type])
+
+  const handleChange = (e) => {
+    setIsChecked(e.target.checked)
+    if (e.target.checked){
+      setCheckedStudent([...checkedStudent, student])
+    }else{
+      setCheckedStudent(checkedStudent.filter(item => item !== student.id))
+    }
+  }
 
   return (
-    <div className="students-item">
-      <Container>
-        <Table bordered={true}>
-          <thead>
-          <tr>
-            <th>#</th>
-            <th>Checkbox</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Age</th>
-          </tr>
-          </thead>
-        </Table>
-      </Container>
-    </div>
+    <tr key={student.id}>
+      <td>{idx + 1}</td>
+      <td><input
+        type="checkbox" checked={isChecked} onChange={handleChange}/></td>
+      <td>{student.name}</td>
+      <td>{student.surname}</td>
+      <td>{student.age}</td>
+    </tr>
   );
-}
+};
 
 export default StudentsItem;

@@ -2,26 +2,33 @@ import React, {useEffect, useState} from 'react';
 import {Table} from "react-bootstrap";
 import axios from "axios";
 import {Container} from "@material-ui/core";
+import StudentsItem from "../StudentsItem";
 
 const StudentsList = () => {
   const [students, setStudents] = useState([])
-  const [isChecked, setIsChecked] = useState(false)
+  const [isCheckedAll, setIsCheckedAll] = useState(false)
+  const [checkedStudent, setCheckedStudent] = useState([])
+  const [type, setType] = useState("all")
 
   useEffect(() => {
     axios("https://6115f1058f38520017a38640.mockapi.io/checkbox")
       .then(({data}) => setStudents(data))
   }, [])
 
-  const handleSelect = (e) => {
-
+  const handleAllChange = (e) => {
+    setIsCheckedAll(e.target.checked)
+    setType("one")
   }
+
 
   return (
     <div className="students">
       <Container>
         <div>
           <p>Select all</p>
-          <input type="checkbox"/>
+          <input type="checkbox"
+          onChange={handleAllChange}
+          />
         </div>
         <Table bordered>
           <thead>
@@ -35,20 +42,21 @@ const StudentsList = () => {
           </thead>
           <tbody>
           {
-              students.map((item, idx) =>
-                <tr key={item.id}>
-                  <td>{idx + 1}</td>
-                  <td><input
-                    type="checkbox" checked={isChecked} onChange={handleSelect}/></td>
-                  <td>{item.name}</td>
-                  <td>{item.surname}</td>
-                  <td>{item.age}</td>
-                </tr>
+              students.map((student, idx) =>
+                <StudentsItem
+                  student={student}
+                  key={student.id} idx={idx}
+                  isCheckedAll={isCheckedAll}
+                  type={type} students={students}
+                  setIsCheckedAll={setIsCheckedAll}
+                  setType={setType}
+                  checkedStudent={checkedStudent}
+                  setCheckedStudent={setCheckedStudent}
+                />
               )
           }
           </tbody>
         </Table>
-        <StudentsList />
       </Container>
     </div>
   );
