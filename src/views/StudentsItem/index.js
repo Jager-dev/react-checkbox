@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import './index.css'
 
-const StudentsItem = ({student, idx, isCheckedAll, type, students,checkedStudent,setCheckedStudent, setIsCheckedAll, setType}) => {
+const StudentsItem = ({student, idx, isCheckedAll, setIsCheckedAll, type, students,checkedStudent,setCheckedStudent, setType}) => {
   const [isChecked, setIsChecked] = useState(false)
 
   useEffect(() => {
-    if (students.length !== checkedStudent.length){
+    if (students.length === checkedStudent.length){
       setType("all")
-      setIsChecked(isCheckedAll)
+      setIsCheckedAll(true)
     }else{
       setType("one")
       setIsCheckedAll(false)
@@ -20,12 +19,12 @@ const StudentsItem = ({student, idx, isCheckedAll, type, students,checkedStudent
     }
   },[isCheckedAll, type])
 
-  const handleChange = (e) => {
+  const handleCheck = (e) => {
     setIsChecked(e.target.checked)
     if (e.target.checked){
       setCheckedStudent([...checkedStudent, student])
     }else{
-      setCheckedStudent(checkedStudent.filter(item => item !== student.id))
+      setCheckedStudent(checkedStudent.filter(item => item.id !== student.id))
     }
   }
 
@@ -33,7 +32,7 @@ const StudentsItem = ({student, idx, isCheckedAll, type, students,checkedStudent
     <tr key={student.id}>
       <td>{idx + 1}</td>
       <td><input
-        type="checkbox" checked={isChecked} onChange={handleChange}/></td>
+        type="checkbox" checked={isChecked} onChange={handleCheck}/></td>
       <td>{student.name}</td>
       <td>{student.surname}</td>
       <td>{student.age}</td>
