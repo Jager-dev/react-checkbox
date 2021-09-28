@@ -9,7 +9,6 @@ const StudentsList = () => {
   const [checkedStudent, setCheckedStudent] = useState([])
   const [isCheckedAll, setIsCheckedAll] = useState(false)
   const [type, setType] = useState("all")
-  const [className, setClassName] = useState("checked")
 
   useEffect(() => {
     axios("https://6115f1058f38520017a38640.mockapi.io/checkbox")
